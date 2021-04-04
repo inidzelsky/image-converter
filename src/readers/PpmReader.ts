@@ -1,4 +1,4 @@
-import { IImageData, IImageReader } from '../ImageConverter';
+import { IImageReader, IImageData } from '../interfaces/ImageConverterInterfaces';
 import { Utilities } from '../utilities/Utilities';
 
 import { access, readFile } from 'fs/promises';
@@ -6,7 +6,10 @@ import { access, readFile } from 'fs/promises';
 class PpmReader implements IImageReader {
   public async read(source: string): Promise<IImageData> {
     const ppmRaw: string = await this.readPpm(source);
-    const values = ppmRaw.trim().split(/\s/g).filter((el: string) => el.length);
+    const values = ppmRaw
+      .trim()
+      .split(/\s/g)
+      .filter((el: string) => el.length);
 
     const [imageWidth, imageHeight, M] = this.parseHeaders(values.slice(0, 4));
     const pixels = this.parsePixels(values.slice(4));
@@ -15,13 +18,7 @@ class PpmReader implements IImageReader {
   }
 
   private async readPpm(filepath: string): Promise<string> {
-    // Check filename format
-
-    if (!/.+\.ppm$/.test(filepath))
-      throw new Error('File is not in .ppm format');
-
     // Check file exists
-
     try {
       await access(filepath);
     } catch (err) {
@@ -29,7 +26,6 @@ class PpmReader implements IImageReader {
     }
 
     // Read file
-
     try {
       const fileRaw = await readFile(filepath, 'utf-8');
       return fileRaw;

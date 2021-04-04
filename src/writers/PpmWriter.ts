@@ -1,5 +1,5 @@
 import { writeFile } from 'fs/promises';
-import { IImageWriter, IImageData } from '../ImageConverter';
+import { IImageWriter, IImageData } from '../interfaces/ImageConverterInterfaces';
 
 class PpmWriter implements IImageWriter {
   public async write(imageData: IImageData, output: string): Promise<void> {

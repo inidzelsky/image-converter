@@ -1,4 +1,4 @@
-import { IImageReader, IImageData } from '../ImageConverter';
+import { IImageReader, IImageData } from '../interfaces/ImageConverterInterfaces';
 import {Hex, Utilities} from '../utilities/Utilities';
 import { access, readFile } from "fs/promises";
 
@@ -13,11 +13,6 @@ class BmpReader implements IImageReader {
   }
 
   private async readBmp(filepath: string): Promise<string> {
-    // Check filename format
-
-    if (!/.+\.bmp$/.test(filepath))
-      throw new Error('File is not in .bmp format');
-
     // Check file exists
 
     try {

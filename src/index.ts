@@ -1,4 +1,8 @@
-import { ArgumentConfig, parse } from 'ts-command-line-args';
+import { parse } from 'ts-command-line-args';
+import { ICommandLineArgs, CommandLineArgsConfig } from "./interfaces/CommandLineInterfaces";
+
+import { IImageReader, IImageWriter } from './interfaces/ImageConverterInterfaces';
+import ImageConverter from './ImageConverter';
 
 import PpmReader from './readers/PpmReader';
 import BmpReader from './readers/BmpReader';
@@ -6,37 +10,24 @@ import BmpReader from './readers/BmpReader';
 import PpmWriter from './writers/PpmWriter';
 import BmpWriter from './writers/BmpWriter';
 
-import ImageConverter, {IImageReader, IImageWriter} from './ImageConverter';
-
-interface ICommandLineArgs {
-  source: string;
-  goalFormat: string;
-  output?: string;
-}
-
-const CommandLineArgsConfig: ArgumentConfig<ICommandLineArgs> = {
-  source: String,
-  goalFormat: String,
-  output: { type: String, optional: true }
-};
-
 (async () => {
   const args: ICommandLineArgs = parse<ICommandLineArgs>(CommandLineArgsConfig);
+  const { source, goalFormat } = args;
 
   let reader: IImageReader;
   let writer: IImageWriter;
 
   // Choose reader
-  if (/.+\.ppm$/.test(args.source)) {
+  if (/.+\.ppm$/.test(source)) {
     reader = new PpmReader();
-  } else if (/.+\.bmp$/.test(args.source)) {
+  } else if (/.+\.bmp$/.test(source)) {
     reader = new BmpReader();
   } else {
     return console.error('Unknown input file format. Allowed only .bmp and .ppm formats');
   }
 
   // Choose writer
-  switch (args.goalFormat) {
+  switch (goalFormat) {
     case 'bmp':
       writer = new BmpWriter();
       break;
@@ -47,6 +38,7 @@ const CommandLineArgsConfig: ArgumentConfig<ICommandLineArgs> = {
       return console.error('Unknown target format. Allowed only .bmp and .ppm formats');
   }
 
+  // Set output filepath
   const output = args.output ? args.output : args.source.slice(0, args.source.lastIndexOf('.')).concat(`.${args.goalFormat}`);
 
   const imageConverter = new ImageConverter(reader, writer);

@@ -1,5 +1,5 @@
 import { writeFile } from 'fs/promises';
-import { IImageWriter, IImageData } from '../ImageConverter';
+import { IImageWriter, IImageData } from '../interfaces/ImageConverterInterfaces';
 import { Hex, Utilities } from '../utilities/Utilities';
 
 interface IBmpHeader {
@@ -8,8 +8,11 @@ interface IBmpHeader {
 
 class BmpWriter implements IImageWriter {
   public async write(imageData: IImageData, output: string): Promise<void> {
+    const PIXEL_DATA_OFFSET = 54;
     const { width, height, pixels } = imageData;
-    const bmpFileHeader = new BmpFileHeader('00000000');
+
+    const bmpFileSize = PIXEL_DATA_OFFSET + pixels.flat().length * 2;
+    const bmpFileHeader = new BmpFileHeader(Hex.decimalToLittleEndian(bmpFileSize, 8));
     const bmpInfoHeader = new BmpInfoHeader(
       Hex.decimalToLittleEndian(width, 8),
       Hex.decimalToLittleEndian(height, 8)
