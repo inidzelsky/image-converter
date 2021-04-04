@@ -1,7 +1,7 @@
-import { IImageReader, IImageData } from '../interfaces/ImageConverterInterfaces';
-import { Utilities } from '../utilities/Utilities';
-
 import { access, readFile } from 'fs/promises';
+import { IImageReader, IImageData } from '../interfaces/ImageConverterInterfaces';
+
+import { Utilities } from '../utilities/Utilities';
 
 class PpmReader implements IImageReader {
   public async read(source: string): Promise<IImageData> {

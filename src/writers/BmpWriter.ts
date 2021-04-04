@@ -51,7 +51,6 @@ class BmpWriter implements IImageWriter {
   }
 }
 
-// TODO Enter valid file size value
 class BmpFileHeader implements IBmpHeader {
   private readonly _fileType: string;
   private readonly _fileSize: string;

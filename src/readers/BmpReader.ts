@@ -1,6 +1,6 @@
+import { access, readFile } from "fs/promises";
 import { IImageReader, IImageData } from '../interfaces/ImageConverterInterfaces';
 import {Hex, Utilities} from '../utilities/Utilities';
-import { access, readFile } from "fs/promises";
 
 
 class BmpReader implements IImageReader {
